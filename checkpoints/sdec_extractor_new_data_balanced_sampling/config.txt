@@ -10,7 +10,7 @@ pool_op = max
 device = cuda:0
 
 ########## training ###########
-n_epochs = 1000
+n_epochs = 100
 
 optimizer = adam
 accumulation_interval = n
@@ -39,7 +39,7 @@ nll_w_decay = n
 val_in_train = y
 val_freq = 20
 
-n_workers = 6
+n_workers = 8
 
 model_dir = models
 save_model = y
