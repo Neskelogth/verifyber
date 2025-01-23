@@ -7,6 +7,7 @@ spatial_tn = n
 knngraph = 5
 k = 5
 pool_op = max
+device = cuda:0
 
 ########## training ###########
 n_epochs = 1000

@@ -35,6 +35,7 @@ def train_ep(cfg, dataloader, model, optimizer, writer, epoch, n_iter):
 
     num_classes = int(cfg["n_classes"])
     num_batch = cfg["num_batch"]
+    device = cfg["device"]
 
     ep_loss = 0.0
     ep_loss_dict = initialize_loss_dict(cfg)
@@ -52,7 +53,8 @@ def train_ep(cfg, dataloader, model, optimizer, writer, epoch, n_iter):
         else:
             target = points["y"]
 
-        points, target = points.to("cuda"), target.to("cuda")
+        points.to(device)
+        target.to(device)
 
         ### initialize gradients
         if not cfg["accumulation_interval"] or i_batch == 0:
@@ -64,13 +66,13 @@ def train_ep(cfg, dataloader, model, optimizer, writer, epoch, n_iter):
         ### minimize the loss
         loss = compute_loss(cfg, logits, target, ep_loss_dict)
         ep_loss += loss.item()
-        running_ep_loss = ep_loss / (i_batch + 1)
+        # running_ep_loss = ep_loss / (i_batch + 1)
 
         loss.backward()
 
         if int(cfg["accumulation_interval"]) % (i_batch + 1) == 0:
             optimizer.step()
-            optimizer.zero_grad
+            optimizer.zero_grad()
         elif not cfg["accumulation_interval"]:
             optimizer.step()
 
@@ -117,6 +119,7 @@ def val_ep(cfg, val_dataloader, model, writer, epoch, best_epoch, best_score):
     """
     best = False
     num_classes = int(cfg["n_classes"])
+    device = cfg["device"]
 
     # set model in eval mode
     model.eval()
@@ -135,7 +138,8 @@ def val_ep(cfg, val_dataloader, model, writer, epoch, best_epoch, best_score):
             else:
                 target = points["y"]
 
-            points, target = points.to("cuda"), target.to("cuda")
+            points.to(device)
+            target.to(device)
 
             log_str = "VALIDATION [%d: %d/%d] " % (epoch, i, len(val_dataloader))
 

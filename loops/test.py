@@ -32,6 +32,7 @@ def test(cfg):
     batch_size = 1
     cfg['batch_size'] = batch_size
     epoch = eval(str(cfg['n_epochs']))
+    device = cfg.get('device', 'cuda:0')
     #n_gf = int(cfg['num_gf'])
     input_size = int(cfg['data_dim'])
 
@@ -116,7 +117,7 @@ def test(cfg):
     #### BUILD THE MODEL
     classifier = get_model(cfg)
 
-    classifier.cuda()
+    classifier.to(device)
     classifier.load_state_dict(torch.load(cfg['weights_path']))
     classifier.eval()
 
@@ -157,12 +158,12 @@ def test(cfg):
             if split_obj:
                 if new_obj_read:
                     if cfg['task'] == 'classification':
-                        obj_pred_choice = torch.zeros(data['obj_full_size'], dtype=torch.int).cuda()
-                        obj_target = torch.zeros(data['obj_full_size'], dtype=torch.int).cuda()
+                        obj_pred_choice = torch.zeros(data['obj_full_size'], dtype=torch.int).to(device)
+                        obj_target = torch.zeros(data['obj_full_size'], dtype=torch.int).to(device)
                         new_obj_read = False
                     elif cfg['task'] == 'regression':
-                        obj_pred_choice = torch.zeros(data['obj_full_size'], dtype=torch.float32).cuda()
-                        obj_target = torch.zeros(data['obj_full_size'], dtype=torch.float32).cuda()
+                        obj_pred_choice = torch.zeros(data['obj_full_size'], dtype=torch.float32).to(device)
+                        obj_target = torch.zeros(data['obj_full_size'], dtype=torch.float32).to(device)
                         new_obj_read = False
 
                 if len(dataset.remaining[j]) == 0:
@@ -176,12 +177,12 @@ def test(cfg):
                 del points.bvec            
             if cfg['with_gt']:
                 target = points['y']
-                target = target.to('cuda')
+                target = target.to(device)
             if cfg['same_size']:
                 points['lengths'] = points['lengths'][0].item()
             #if cfg['model'] == 'pointnet_cls':
                 #points = points.view(len(data['obj_idxs']), -1, input_size)
-            points = points.to('cuda')
+            points = points.to(device)
 
             if cfg['task'] == 'classification':
                 logits = classifier(points)
