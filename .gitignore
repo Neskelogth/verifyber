@@ -1,6 +1,7 @@
 *.pyc
 .DS_Store
 .vscode/
+.idea/
 runs/
 tb_logs/
 tmp_tractogram_filtering*/

@@ -41,7 +41,7 @@ def load_selected_streamlines(trk_fn,
 
     get_length = get_length_struct
 
-    lengths = np.empty(nb_streamlines, dtype=np.int)
+    lengths = np.empty(nb_streamlines, dtype=np.int32)
 
     with open(trk_fn, 'rb') as f:
         f.seek(header_size)
@@ -125,7 +125,7 @@ def load_selected_streamlines_uniform_size(trk_fn,
         f.seek(header_size)
         l = get_length(f)
 
-    lengths = np.array([l] * nb_streamlines).astype(np.int)
+    lengths = np.array([l] * nb_streamlines).astype(np.int32)
 
      # position in bytes where to find a given streamline in the TRK file:
     index_bytes = lengths * point_bytes + properties_bytes + length_bytes
@@ -211,7 +211,7 @@ def load_selected_streamlines_uniform_size_seq(trk_fn,
         f.seek(header_size)
         l = np.fromfile(f, np.int32, 1)[0]
 
-    lengths = np.array([l] * len(idxs)).astype(np.int)
+    lengths = np.array([l] * len(idxs)).astype(np.int32)
 
     # float for each streamline, the last + 1 is for the length float
     n_floats = l * point_size + n_properties + 1

@@ -100,7 +100,7 @@ def load_streamlines(trk_fn,
                                 idxs,
                                 replace=replace)
     elif isinstance(idxs, list):
-        idxs = np.array(idxs, dtype=np.int)
+        idxs = np.array(idxs, dtype=np.int32)
 
     ## See: http://www.trackvis.org/docs/?subsect=fileformat
     length_bytes = 4
