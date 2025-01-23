@@ -197,9 +197,13 @@ def train(cfg):
     trans_train = []
     trans_val = []
     if cfg["rnd_sampling"]:
-        trans_train.append(RndSampling(sample_size, maintain_prop=False))
-        # prop_vector=[1, 1]))
-        trans_val.append(RndSampling(sample_size, maintain_prop=False))
+        if "balanced_sampling" not in cfg:
+            trans_train.append(RndSampling(sample_size, maintain_prop=False))
+            # prop_vector=[1, 1]))
+            trans_val.append(RndSampling(sample_size, maintain_prop=False))
+        else:
+            trans_train.append(RndSampling(sample_size, maintain_prop=False, prop_vector=[0.5, 0.5]))
+            trans_val.append(RndSampling(sample_size, maintain_prop=False, prop_vector=[0.5, 0.5]))
 
     dataset, dataloader = get_dataset(cfg, trans=trans_train)
     val_dataset, val_dataloader = get_dataset(cfg, trans=trans_val, train=False)

@@ -45,6 +45,7 @@ class RndSampling(object):
 
             assert (self.output_size == len(chosen_idx))
             chosen_idx = np.array(chosen_idx)
+
         elif len(self.prop_vector) != 0:
             n_classes = gt.max() + 1
             while len(self.prop_vector) < n_classes:
@@ -78,6 +79,7 @@ class RndSampling(object):
 
             assert (self.output_size == len(chosen_idx))
             chosen_idx = np.array(chosen_idx)
+
         else:
             chosen_idx = np.random.choice(range(n), self.output_size)
 
