@@ -61,6 +61,17 @@ def test(cfg):
                                   train=False,
                                   load_one_full_subj=False,
                                   labels_dir=cfg['labels_dir'])
+    elif 'gin206' in cfg['dataset']:
+        dataset = ds.GIN206Dataset(cfg['sub_list_test'],
+                                  cfg['dataset_dir'],
+                                  transform=transforms.Compose(trans_val),
+                                  with_gt=cfg['with_gt'],
+                                  #distance=T.Distance(norm=True,cat=False),
+                                  return_edges=True,
+                                  split_obj=True,
+                                  train=False,
+                                  load_one_full_subj=False,
+                                  labels_dir=cfg['labels_dir'])
     elif cfg['dataset'] == 'atlasparts':
         dataset = ds.StreamAtlasDataset(cfg['sub_list_test'],
                                         cfg['dataset_dir'],

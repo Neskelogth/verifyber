@@ -44,6 +44,14 @@ def get_dataset(cfg, trans, train=True):
                                   return_edges=cfg['return_edges'],
                                   load_one_full_subj=False,
                                   labels_dir=cfg['labels_dir'])
+    if 'gin206' in cfg['dataset']:
+        dataset = ds.GIN206Dataset(sub_list,
+                                  cfg['dataset_dir'],
+                                  same_size=cfg['same_size'],
+                                  transform=transforms.Compose(trans),
+                                  return_edges=cfg['return_edges'],
+                                  load_one_full_subj=False,
+                                  labels_dir=cfg['labels_dir'])
     if cfg['dataset'] == 'atlasparts':
         dataset = ds.StreamAtlasDataset(sub_list,
                                         cfg['dataset_dir'],
