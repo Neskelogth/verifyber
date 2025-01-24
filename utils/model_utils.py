@@ -1,7 +1,8 @@
 import os
 import sys
 import torch
-from models import (DEC, BiLSTM, DECSeq, PN, FINTA)
+from models import (DEC, BiLSTM, DECSeq, PN, FINTA, DeeperDECSeq)
+
 
 def get_model(cfg):
 
@@ -19,6 +20,14 @@ def get_model(cfg):
                             dropout=False)
     if cfg['model'] == 'sdec':
         classifier = DECSeq(
+            input_size,
+            num_classes,
+            dropout=False,
+            k=cfg['k'],
+            aggr='max',
+            pool_op='max')
+    elif cfg['model'] == 'dsdec':
+        classifier = DeeperDECSeq(
             input_size,
             num_classes,
             dropout=False,
