@@ -7,6 +7,8 @@ spatial_tn = n
 knngraph = 5
 k = 5
 pool_op = max
+device = cuda:0
+
 
 ########## training ###########
 n_epochs = 1000
@@ -32,6 +34,7 @@ bn_decay_gamma = 0.5
 ########## loss ###########
 loss = nll
 nll_w = n
+nll_w_decay = n
 
 ########### general ###########
 val_in_train = y
@@ -61,9 +64,9 @@ dataset_dir = /app/data/Extractor_merged/
 labels_dir = /app/data/Extractor_merged/
 fixed_size = 8000
 val_dataset_dir = /app/data/Extractor_merged/
-sub_list_train = data/sub_list_HCP_train.txt
-sub_list_val = data/sub_list_HCP_val.txt
-sub_list_test = data/sub_list_HCP_test.txt
+sub_list_train = data/GIN_206_subset_split_train.txt
+sub_list_val = data/GIN_206_subset_split_val.txt
+sub_list_test = data/GIN_206_subset_split_test.txt
 data_dim = 3
 embedding_size = 40
 fold_size = 2

@@ -53,8 +53,8 @@ def train_ep(cfg, dataloader, model, optimizer, writer, epoch, n_iter):
         else:
             target = points["y"]
 
-        points.to(device)
-        target.to(device)
+        points = points.to(device)
+        target = target.to(device)
 
         ### initialize gradients
         if not cfg["accumulation_interval"] or i_batch == 0:
@@ -138,8 +138,8 @@ def val_ep(cfg, val_dataloader, model, writer, epoch, best_epoch, best_score):
             else:
                 target = points["y"]
 
-            points.to(device)
-            target.to(device)
+            points = points.to(device)
+            target = target.to(device)
 
             log_str = "VALIDATION [%d: %d/%d] " % (epoch, i, len(val_dataloader))
 
