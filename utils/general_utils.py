@@ -89,11 +89,14 @@ def update_metrics(metrics, prediction, target, task='classification'):
         iou = float(tp) / (tp + fp + fn)
         prec = float(tp) / (tp + fp)
         recall = float(tp) / (tp + fn)
+        specificity = float(tn) / (tn + fp)
+        balanced_accuracy = float(recall + specificity) / 2
         
         metrics['prec'].append(prec)
         metrics['recall'].append(recall)
         metrics['acc'].append(acc)
         metrics['iou'].append(iou)
+        metrics['bal_acc'].append(balanced_accuracy)
     else:
         prediction = prediction.data.cpu()
         target = target.data.cpu()

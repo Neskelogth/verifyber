@@ -85,7 +85,7 @@ def train_ep(cfg, dataloader, model, optimizer, writer, epoch, n_iter):
                 "[%d: %d/%d] train loss: %f %s"
                 % (
                     epoch,
-                    i_batch,
+                    i_batch + 1,
                     num_batch,
                     loss.item(),
                     get_metrics_inline(metrics, "last"),

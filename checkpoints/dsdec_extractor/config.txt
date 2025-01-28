@@ -82,7 +82,7 @@ n_classes = 2
 ignore_class = 0
 same_size = y
 
-experiment_name = deeper_sdec_nodropout_loss_nll-data_hcp20_gt20mm_fs8000_rnd_sampling
+experiment_name = deeper_sdec_nodropout_loss_nll-data_GIN_206_gt20mm_fs8000_rnd_sampling
 
 ####### ************************************************************************
 ####### ************************************************************************

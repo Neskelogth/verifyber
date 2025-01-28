@@ -51,7 +51,7 @@ class DeeperDECSeq(torch.nn.Module):
         super(DeeperDECSeq, self).__init__()
         self.conv1 = EdgeConv(MLP([2 * input_size, 64, 64, 64], batch_norm=True), aggr)
         self.conv2 = DynamicEdgeConv(MLP([2 * 64, 128], batch_norm=True), k, aggr)
-        self.conv3 = DynamicEdgeConv(MLP([2 * 128, 256], batch_norm=True), k * 2, aggr)
+        self.conv3 = DynamicEdgeConv(MLP([2 * 128, 256], batch_norm=True), k, aggr)
         self.lin1 = MLP([256 + 64, 1024])
         if pool_op == 'max':
             self.pool = global_max_pool
