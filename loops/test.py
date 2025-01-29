@@ -133,6 +133,7 @@ def test(cfg):
             mean_val_iou = torch.tensor([])
             mean_val_prec = torch.tensor([])
             mean_val_recall = torch.tensor([])
+            mean_val_bal_acc = torch.tensor([])
         elif cfg['task'] == 'regression':
             mean_val_mse = torch.tensor([])
             mean_val_mae = torch.tensor([])
@@ -227,8 +228,13 @@ def test(cfg):
                     mean_val_recall = torch.cat((mean_val_recall, recall), 0)
                     mean_val_iou = torch.cat((mean_val_iou, iou), 0)
                     mean_val_acc = torch.cat((mean_val_acc, torch.tensor([acc])), 0)
+
+                    specificity = torch.tensor([float(tn) / (tn + fp)])
+                    balanced_accuracy = (recall + specificity) / 2
+                    mean_val_bal_acc = torch.cat((mean_val_bal_acc, torch.tensor([balanced_accuracy])))
+
                     print('VALIDATION [%d: %d/%d] val acc: %f' % (epoch, j + 1, len(dataset), acc))
-                    
+
                 elif cfg['task'] == 'regression':
                     print('val max class target ', obj_target.max().item())
                     print('val min class target ', obj_target.min().item())
@@ -295,6 +301,7 @@ def test(cfg):
             print('TEST PRECISION: %f' % torch.mean(mean_val_prec).item())
             print('TEST RECALL: %f' % torch.mean(mean_val_recall).item())
             print('TEST IOU: %f' % torch.mean(mean_val_iou).item())
+            print('TEST BALANCED ACCURACY: %f' % torch.mean(mean_val_bal_acc).item())
             mean_val_dsc = mean_val_prec * mean_val_recall * 2 / (mean_val_prec + mean_val_recall)
             final_scores_file = writer.log_dir + '/final_scores_test_%d.txt' % epoch
             scores_file = writer.log_dir + '/scores_test_%d.txt' % epoch
@@ -308,6 +315,8 @@ def test(cfg):
                 f.writelines('%f\n' % v for v in  mean_val_recall.tolist())
                 f.write('dsc\n')
                 f.writelines('%f\n' % v for v in  mean_val_dsc.tolist())
+                f.write('bal_acc\n')
+                f.writelines('%f\n' % v for v in mean_val_bal_acc.tolist())
             with open(final_scores_file, 'w') as f:
                 f.write('acc\n')
                 f.write('%f\n' % mean_val_acc.mean())
