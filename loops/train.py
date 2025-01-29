@@ -97,7 +97,7 @@ def train_ep(cfg, dataloader, model, optimizer, writer, epoch, n_iter):
                 "[%d: %d/%d] train loss: %f %s"
                 % (
                     epoch,
-                    i_batch,
+                    i_batch + 1,
                     num_batch,
                     loss.item(),
                     get_metrics_inline(metrics, "last"),
@@ -141,7 +141,7 @@ def val_ep(cfg, val_dataloader, model, writer, epoch, best_epoch, best_score):
             points = points.to(device)
             target = target.to(device)
 
-            log_str = "VALIDATION [%d: %d/%d] " % (epoch, i, len(val_dataloader))
+            log_str = "VALIDATION [%d: %d/%d] " % (epoch, i + 1, len(val_dataloader))
 
             logits = model(points)
 

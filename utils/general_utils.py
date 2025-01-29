@@ -68,6 +68,7 @@ def initialize_metrics():
     metrics['recall'] = []
     metrics['mse'] = []
     metrics['abse'] = []
+    metrics['bal_acc'] = []
 
     return metrics
 

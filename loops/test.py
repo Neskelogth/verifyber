@@ -227,7 +227,7 @@ def test(cfg):
                     mean_val_recall = torch.cat((mean_val_recall, recall), 0)
                     mean_val_iou = torch.cat((mean_val_iou, iou), 0)
                     mean_val_acc = torch.cat((mean_val_acc, torch.tensor([acc])), 0)
-                    print('VALIDATION [%d: %d/%d] val acc: %f' % (epoch, j, len(dataset), acc))
+                    print('VALIDATION [%d: %d/%d] val acc: %f' % (epoch, j + 1, len(dataset), acc))
                     
                 elif cfg['task'] == 'regression':
                     print('val max class target ', obj_target.max().item())
@@ -239,7 +239,7 @@ def test(cfg):
                     mean_val_mae = torch.cat((mean_val_mae, torch.tensor([mae])), 0)
                     mean_val_mse = torch.cat((mean_val_mse, torch.tensor([mse])), 0)
                     mean_val_rho = torch.cat((mean_val_rho, torch.tensor([rho])), 0)
-                    print('VALIDATION [%d: %d/%d] val mse: %f val mae: %f val rho: %f' % (epoch, j, len(dataset), mse, mae, rho))
+                    print('VALIDATION [%d: %d/%d] val mse: %f val mae: %f val rho: %f' % (epoch, j + 1, len(dataset), mse, mae, rho))
                 
             if cfg['save_pred'] and consumed:
                 print('buffering prediction %s' % sample_name)
