@@ -116,6 +116,7 @@ def compute_loss(cfg, logits, target, loss_dict=None):
 
     elif cfg['loss'] == 'focal':
         pred = F.softmax(logits, dim=-1).view(-1, int(cfg['n_classes']))
+        target = F.one_hot(target.long(), num_classes=2).float()
         target = target.type_as(pred)
         alpha = 1 - cfg['plausibles_prob']
         gamma = cfg['gamma']
