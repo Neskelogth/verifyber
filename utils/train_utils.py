@@ -13,21 +13,6 @@ from losses.entropy_loss import NLLLoss
 from .general_utils import save_dict_to_file
 
 
-class WeightedFocalLoss(nn.Module):
-    def __init__(self, alpha=.25, gamma=2):
-        super(WeightedFocalLoss, self).__init__()
-        self.alpha = torch.tensor([alpha, 1-alpha]).cuda()
-        self.gamma = gamma
-
-    def forward(self, inputs, targets):
-        BCE_loss = F.binary_cross_entropy_with_logits(inputs, targets, reduction='none')
-        targets = targets.type(torch.long)
-        at = self.alpha.gather(0, targets.data.view(-1))
-        pt = torch.exp(-BCE_loss)
-        F_loss = at * (1-pt) ** self.gamma * BCE_loss
-        return F_loss.mean()
-
-
 def create_tb_logger(cfg):
     if cfg['experiment_name'] != 'default':
         for ext in range(100):
@@ -130,10 +115,15 @@ def compute_loss(cfg, logits, target, loss_dict=None):
         tot_loss += loss
 
     elif cfg['loss'] == 'focal':
-        loss = WeightedFocalLoss(gamma=cfg['gamma'], alpha=cfg['plausibles_prob'])
-        l = loss(logits, target)
-        tot_loss += l
+        pred = F.softmax(logits, dim=-1).view(-1, int(cfg['n_classes']))
+        target = target.type_as(pred)
+        alpha = 1 - cfg['plausibles_prob']
+        gamma = cfg['gamma']
+        pt = (1 - pred) * target + pred * (1 - target)
+        focal_weight = (alpha * target + (1 - alpha) * (1 - target)) * torch.pow(pt, gamma) # plausible streamlines are label 1 and should have 0.8 weight (1 - 0.2)
+        loss = (F.binary_cross_entropy(pred, target, reduction='none') * focal_weight).mean()
 
+        tot_loss += loss
 
     if loss_dict is not None:
         loss_dict[cfg['loss']] += loss.item()

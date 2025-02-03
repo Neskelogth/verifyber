@@ -236,14 +236,14 @@ def train(cfg):
         best_pred = np.inf
     best_epoch = 0
     current_lr = float(cfg["learning_rate"])
-    initial_nll_w = cfg["nll_w"]
+    initial_nll_w = cfg.get("nll_w", False)
     for epoch in range(n_epochs + 1):
 
         # update bn decay
         if cfg["bn_decay"] and epoch != 0 and epoch % int(cfg["bn_decay_step"]) == 0:
             update_bn_decay(cfg, model, epoch)
 
-        if cfg["nll_w_decay"] and epoch % int(cfg["nll_w_decay_step"]) == 0:
+        if 'nll_w_decay' in cfg and cfg["nll_w_decay"] and epoch % int(cfg["nll_w_decay_step"]) == 0:
             cfg["nll_w"][0] = initial_nll_w[0] * cfg["nll_w_decay"] ** epoch
 
         loss, n_iter = train_ep(

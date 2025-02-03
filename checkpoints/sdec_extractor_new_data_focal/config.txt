@@ -11,6 +11,7 @@ pool_op = max
 ########## training ###########
 n_epochs = 1000
 
+device = cuda:0
 optimizer = adam
 accumulation_interval = n
 lr_type = step
@@ -79,6 +80,8 @@ centering = n
 n_classes = 2
 ignore_class = 0
 same_size = y
+
+experiment_name = sdec_nodropout_loss_focal-data_GIN_206_subs_gt20mm_fs8000_rnd_sampling
 
 [HCP20]
 task = classification
