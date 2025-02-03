@@ -4,12 +4,29 @@ import sys
 
 import numpy as np
 import torch
+import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.tensorboard import SummaryWriter
 from torch import optim
 
 from losses.entropy_loss import NLLLoss
 from .general_utils import save_dict_to_file
+
+
+class WeightedFocalLoss(nn.Module):
+    def __init__(self, alpha=.25, gamma=2):
+        super(WeightedFocalLoss, self).__init__()
+        self.alpha = torch.tensor([alpha, 1-alpha]).cuda()
+        self.gamma = gamma
+
+    def forward(self, inputs, targets):
+        BCE_loss = F.binary_cross_entropy_with_logits(inputs, targets, reduction='none')
+        targets = targets.type(torch.long)
+        at = self.alpha.gather(0, targets.data.view(-1))
+        pt = torch.exp(-BCE_loss)
+        F_loss = at * (1-pt) ** self.gamma * BCE_loss
+        return F_loss.mean()
+
 
 def create_tb_logger(cfg):
     if cfg['experiment_name'] != 'default':
@@ -95,8 +112,7 @@ def compute_loss(cfg, logits, target, loss_dict=None):
     tot_loss = 0.
     if cfg['loss'] == 'nll':
         pred = F.log_softmax(logits, dim=-1).view(-1, int(cfg['n_classes']))
-        c_w = None if not cfg['nll_w'] else torch.tensor(cfg['nll_w'],
-                                                         device=pred.device)
+        c_w = None if not cfg['nll_w'] else torch.tensor(cfg['nll_w'], device=pred.device)
         loss = F.nll_loss(pred, target.long(), weight=c_w)
         tot_loss += loss
 
@@ -112,6 +128,12 @@ def compute_loss(cfg, logits, target, loss_dict=None):
     elif cfg['loss'] == 'mae':
         loss = F.l1_loss(logits,target.float())
         tot_loss += loss
+
+    elif cfg['loss'] == 'focal':
+        loss = WeightedFocalLoss(gamma=cfg['gamma'], alpha=cfg['plausibles_prob'])
+        l = loss(logits, target)
+        tot_loss += l
+
 
     if loss_dict is not None:
         loss_dict[cfg['loss']] += loss.item()

@@ -1,14 +1,12 @@
 [DEFAULT]
 ########### model ###########
-model = dsdec
+model = sdec
 batch_norm = y
 dropout = n
 spatial_tn = n
 knngraph = 5
 k = 5
 pool_op = max
-device = cuda:0
-
 
 ########## training ###########
 n_epochs = 1000
@@ -32,15 +30,15 @@ bn_decay_step = 90
 bn_decay_gamma = 0.5
 
 ########## loss ###########
-loss = nll
-nll_w = n
-nll_w_decay = n
+loss = focal
+gamma = 2
+plausibles_prob = 0.2
 
 ########### general ###########
 val_in_train = y
 val_freq = 20
 
-n_workers = 6
+n_workers = 12
 
 model_dir = models
 save_model = y
@@ -64,26 +62,51 @@ dataset_dir = /app/data/Extractor_merged/
 labels_dir = /app/data/Extractor_merged/
 fixed_size = 8000
 val_dataset_dir = /app/data/Extractor_merged/
-sub_list_train = data/GIN_206_subset_split_train.txt
-sub_list_val = data/GIN_206_subset_split_val.txt
-sub_list_test = data/GIN_206_subset_split_test.txt
+sub_list_train = data/GIN_206_split_train.txt
+sub_list_val = data/GIN_206_split_val.txt
+sub_list_test = data/GIN_206_split_test.txt
 data_dim = 3
 embedding_size = 40
 fold_size = 2
 return_edges = y
 
-batch_size = 2
+batch_size = 4
 repeat_sampling = 3
 shuffling = y
 rnd_sampling = y
-balanced_sampling = y
 standardization = n
 centering = n
 n_classes = 2
 ignore_class = 0
 same_size = y
 
-experiment_name = deeper_sdec_nodropout_loss_nll-data_GIN_206_gt20mm_fs8000_balanced_sampling
+[HCP20]
+task = classification
+########### data ###########
+dataset = hcp20
+dataset_dir = /app/data/dati_pietro/derivatives/merge_shuffle_trk_v2_gt20mm/
+labels_dir = /app/data/dati_pietro/derivatives/merge_shuffle_trk_v2_gt20mm/
+fixed_size = 8000
+val_dataset_dir = /app/data/dati_pietro/derivatives/merge_shuffle_trk_v2_gt20mm/
+sub_list_train = data/sub_list_HCP_train.txt
+sub_list_val = data/sub_list_HCP_val.txt
+sub_list_test = data/sub_list_HCP_test.txt
+data_dim = 3
+embedding_size = 40
+fold_size = 2
+return_edges = y
+
+batch_size = 4
+repeat_sampling = 3
+shuffling = y
+rnd_sampling = y
+standardization = n
+centering = n
+n_classes = 2
+ignore_class = 0
+same_size = y
+
+experiment_name = sdec_nodropout_loss_focal-data_GIN_206_subs_gt20mm_fs8000_rnd_sampling
 
 ####### ************************************************************************
 ####### ************************************************************************
