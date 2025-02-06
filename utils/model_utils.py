@@ -1,7 +1,7 @@
 import os
 import sys
 import torch
-from models import (DEC, BiLSTM, DECSeq, PN, FINTA, DeeperDECSeq)
+from models import (DEC, BiLSTM, DECSeq, PN, FINTA, DeeperDECSeq, RGCN)
 
 
 def get_model(cfg):
@@ -41,6 +41,9 @@ def get_model(cfg):
             k=cfg['k'],
             aggr='max',
             pool_op='max')
+    if cfg['model'] == 'rgcn':
+        classifier = RGCN(n_classes=num_classes,
+                          dropout=cfg['dropout'])
     elif cfg['model'] == 'pn_geom':
         classifier = PN(input_size,
                            num_classes,

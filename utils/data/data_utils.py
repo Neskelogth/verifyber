@@ -44,14 +44,23 @@ def get_dataset(cfg, trans, train=True):
                                   return_edges=cfg['return_edges'],
                                   load_one_full_subj=False,
                                   labels_dir=cfg['labels_dir'])
-    if 'gin206' in cfg['dataset']:
+    if 'gin206' in cfg['dataset'] and 'knn' not in cfg['dataset']:
         dataset = ds.GIN206Dataset(sub_list,
                                   cfg['dataset_dir'],
                                   same_size=cfg['same_size'],
                                   transform=transforms.Compose(trans),
                                   return_edges=cfg['return_edges'],
-                                  load_one_full_subj=False,
                                   labels_dir=cfg['labels_dir'])
+
+    if 'gin206' in cfg['dataset'] and 'knn' in cfg['dataset']:
+        dataset = ds.GIN206KnnDataset(sub_list,
+                                      cfg['dataset_dir'],
+                                      same_size=cfg['same_size'],
+                                      transform=transforms.Compose(trans),
+                                      return_edges=cfg['return_edges'],
+                                      labels_dir=cfg['labels_dir'],
+                                      k=cfg['k'])
+
     if cfg['dataset'] == 'atlasparts':
         dataset = ds.StreamAtlasDataset(sub_list,
                                         cfg['dataset_dir'],

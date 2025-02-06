@@ -50,7 +50,7 @@ def test(cfg):
                                   labels_dir=cfg['labels_dir'],
                                   labels_name=cfg['labels_name'],
                                   with_gt=cfg['with_gt'],
-                                  split_obj=True,)
+                                  split_obj=True)
     elif 'hcp20' in cfg['dataset']:
         dataset = ds.HCP20Dataset(cfg['sub_list_test'],
                                   cfg['dataset_dir'],
@@ -62,7 +62,7 @@ def test(cfg):
                                   train=False,
                                   load_one_full_subj=False,
                                   labels_dir=cfg['labels_dir'])
-    elif 'gin206' in cfg['dataset']:
+    elif 'gin206' in cfg['dataset'] and 'knn' not in cfg['dataset']:
         dataset = ds.GIN206Dataset(cfg['sub_list_test'],
                                   cfg['dataset_dir'],
                                   transform=transforms.Compose(trans_val),
@@ -73,6 +73,15 @@ def test(cfg):
                                   train=False,
                                   load_one_full_subj=False,
                                   labels_dir=cfg['labels_dir'])
+    elif 'gin206' in cfg['dataset'] and 'knn' in cfg['dataset']:
+        dataset = ds.GIN206Dataset(cfg['sub_list_test'],
+                                   cfg['dataset_dir'],
+                                   transform=transforms.Compose(trans_val),
+                                   return_edges=True,
+                                   split_obj=True,
+                                   train=False,
+                                   labels_dir=cfg['labels_dir'])
+
     elif cfg['dataset'] == 'atlasparts':
         dataset = ds.StreamAtlasDataset(cfg['sub_list_test'],
                                         cfg['dataset_dir'],
