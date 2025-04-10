@@ -79,7 +79,7 @@ def load_streamlines(trk_fn,
 
     lazy_trk = nib.streamlines.load(trk_fn, lazy_load=True)
     header = lazy_trk.header
-    header_size = header['hdr_size']
+    # header_size = header['hdr_size']
     nb_streamlines = header['nb_streamlines']
     n_scalars = header['nb_scalars_per_point']
     n_properties = header['nb_properties_per_streamline']

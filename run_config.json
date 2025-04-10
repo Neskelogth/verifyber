@@ -1,8 +1,9 @@
 {
-    "trk": "data/sub-510225_1k-streams.trk",
-    "t1": "data/sub-510225_T1w_spacedwi.nii.gz",
+    "trk": ["../data/HCP_reorganized/sub-341834/tck_test_aligned_JHU.tck", "../data/HCP_reorganized/sub-341834/tck_test_run_2_aligned_JHU.tck", "../data/HCP_reorganized/sub-341834/tck_retest_aligned_JHU.tck"],
+    "t1": ["../data/HCP_reorganized/sub-341834/T1_test_aligned_JHU.nii.gz", "../data/HCP_reorganized/sub-341834/T1_test_run_2_aligned_JHU.nii.gz", "../data/HCP_reorganized/sub-341834/T1_retest_aligned_JHU.nii.gz"],
     "fa": "",
-    "resample_points": true,
+    "subs": ["sub-341834_test", "sub-341834_test_run_2", "sub-341834_retest"],
+    "resample_points": false,
     "task": "classification",
     "return_trk": true,
     "warp": "fast",
