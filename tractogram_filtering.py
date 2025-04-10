@@ -317,7 +317,9 @@ if __name__ == '__main__':
         #                                              affine_to_rasmm=np.eye(4))
         #     nib.streamlines.save(resampled_t, trk_fn)
         #     print(f'done in {time() - t0} sec')
-
+        
+        if trk.endswith('tck'):
+            tck2trk(trk, mni_fn_dict[img_type], out_fn=trk_fn)
 
         if not osp.exists(trk_fn):
             if not osp.exists(tck_mni_fn):
